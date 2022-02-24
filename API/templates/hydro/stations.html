@@ -8,18 +8,19 @@
 </head>
 <body>
     <h1>HydrEAUviewer API</h1>
-    <h2>Real time hydrological data</h2>
+    <h2>Hydrological stations</h2>
     <p><a href={{url_for('root')}}>home page</a></p>
     <h3>Description</h3>
     <p>
-        hydrological data in real time, water flow "Q" and tide "H" recorded by the hydrological stations.
+        Enter coordinates and distance to find stations located around this specific point.  
     </p>
     <h3>filter request</h3>
-    <p>station <input type="text" name="station"></p>
-    <p>hydrological measure <select name="hydro_measure">
-        <option value="H">water tide</option>
-        <option value="Q">water flow</option>
-    </select></p>
-    <p>days before <input type="text" name="days_before"></p>
+    <form action={{url_for('result', domain="stations")}} method = "POST">
+        <p>latitude <input type="text" name="lat"></p>
+        <p>longitude <input type="text" name="long"></p>
+        <p>distance <input type="text" name="dist"></p>
+        <p><input type="submit" value="result"></p>
+    </form>
+    <p>{{result}}</p>
 </body>
 </html>

@@ -31,17 +31,18 @@ def stations():
 
 @API.route("/hydro/elab")
 def elab():
-    return render_template("hydro/hydroElab.html")
+    return render_template("hydro/elab.html")
 
 @API.route("/hydro/tr")
 def tr():
-    return render_template("hydro/hydroTr.html")
+    return render_template("hydro/tr.html")
 
-@API.route("/hydro/<string:domain>/result", methods=['POST', 'GET'])
-def result():
+@API.route("/hydro/<domain>/result", methods=['POST', 'GET'])
+def result(domain):
     if request.method == 'POST':
         result = request.form
-        return result
+        return render_template("hydro/{}.html".format(domain), result = result)
+        # return result
 
 # ---------------------------------- Run API --------------------------------- #
 
