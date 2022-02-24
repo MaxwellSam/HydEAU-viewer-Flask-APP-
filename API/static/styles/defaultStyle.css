@@ -1,0 +1,13 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2 {
+    color:darkblue;
+    text-align: center;
+}
+
+
+p {
+    line-height: 0.7cm;
+}

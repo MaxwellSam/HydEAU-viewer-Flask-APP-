@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydrEAUviewer API</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/defaultStyle.css') }}">
+</head>
+<body>
+    <h1>HydrEAUviewer API</h1>
+    <h2>Real time hydrological data</h2>
+    <p><a href={{url_for('root')}}>home page</a></p>
+    <h3>Description</h3>
+    <p>
+        hydrological data in real time, water flow "Q" and tide "H" recorded by the hydrological stations.
+    </p>
+    <h3>filter request</h3>
+    <p>station <input type="text" name="station"></p>
+    <p>hydrological measure <select name="hydro_measure">
+        <option value="H">water tide</option>
+        <option value="Q">water flow</option>
+    </select></p>
+    <p>days before <input type="text" name="days_before"></p>
+</body>
+</html>

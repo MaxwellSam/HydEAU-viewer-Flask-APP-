@@ -1,0 +1,22 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydrEAUviewer API</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/defaultStyle.css') }}">
+</head>
+<body>
+    <h1>HydrEAUviewer API</h1>
+    <h3>Description</h3>
+    <p>
+        HydrEAUviewer API is an application programming interface for recovering hydrological data from hubEAU.
+        HubEAU is also an API which allow a simple acess to data on water. 
+        Then, this API is an overlayer interface which simplify data recovery for the HydEAUviewer Web APP.
+    </p>
+    <h3>API Routes</h3>
+    <p>Hydrological Stations: <a href={{url_for('stations')}}>/hydro/stations</a></p>
+    <p>Elaborated data: <a href={{url_for('elab')}}>/hydro/elab</a></p>
+    <p>Real Time data: <a href={{url_for('tr')}}>/hydro/tr</a></p>
+</body>
+</html>
