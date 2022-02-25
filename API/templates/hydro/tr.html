@@ -17,13 +17,21 @@
     <h3>filter request</h3>
     <form action={{url_for('result', domain="tr")}} method = "POST">
         <p>station <input type="text" name="station"></p>
-        <p>hydrological measure <select name="hydro_measure">
+        <p>hydrological measure <select name="hydro_measure_tr">
             <option value="H">water tide</option>
             <option value="Q">water flow</option>
         </select></p>
         <p>days before <input type="text" name="days_before"></p>
         <p><input type="submit" value="creat request url"></p>
     </form>
-    <p>{{result}}</p>
+    <code>{{result}}</code>
+    <p><a href={{url}}>{{url}}</a></p>
+    <h3>Request exemple</h3>
+    <p>
+        <b>station "Le Gat-Mort à Saint-Selve"</b> <br>
+        station:  O965000101 <br>
+        hydrological measure: water tide <br>
+        days before: 5 <br>
+    </p>
 </body>
 </html>
