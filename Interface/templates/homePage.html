@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydrEAUviewer APP</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container">
+            <div class="navbar left">
+                <a href={{url_for('home')}}>HydrEAUviewer APP</a>
+            </div>
+            <div class="navbar right">
+                <ul class="navbar menu">
+                    <li><a href="#">Graphs</a></li>
+                    <li><a href="#">DataFrames</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="inputbox">
+                <h3 class="param-type">Parameters</h3>
+                <h4>Coordinates</h4>
+                <p>
+                    <label for="long">Longitude</label>
+                    <input id="long" type="number" name="long" step="0.00000001" placeholder="enter a coordinate"><br>
+                    <label for="lat">Latitude</label>
+                    <input id="lat" type="number" name="lat" step="0.00000001" placeholder="enter a coordinate"><br>
+                    <label for="dist">Distance (km)</label>
+                    <input id="dist" type="number" name="dist" step="10" min="10" value="30" placeholder="enter a distance"><br>
+                </p>
+                <p>
+                    <h3 class="param-type">Data</h3>
+                    <label for="hydro_measure">Hydrological measure</label>
+                    <select name="hydro_measure" id="hydro_measure">
+                        <option value="Qmj">daily flow</option>
+                        <option value="Q">flow</option>
+                        <option value="H">tide</option>
+                    </select>
+                </p>
+               
+            </div>
+        </div>
+    </div>
+</body>
+</html>

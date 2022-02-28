@@ -7,31 +7,46 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/defaultStyle.css') }}">
 </head>
 <body>
-    <h1>HydrEAUviewer API</h1>
-    <h2>Real time hydrological data</h2>
-    <p><a href={{url_for('root')}}>home page</a></p>
-    <h3>Description</h3>
-    <p>
-        hydrological data in real time, water flow "Q" and tide "H" recorded by the hydrological stations.
-    </p>
-    <h3>filter request</h3>
-    <form action={{url_for('result', domain="tr")}} method = "POST">
-        <p>station <input type="text" name="station"></p>
-        <p>hydrological measure <select name="hydro_measure_tr">
-            <option value="H">water tide</option>
-            <option value="Q">water flow</option>
-        </select></p>
-        <p>days before <input type="text" name="days_before"></p>
-        <p><input type="submit" value="creat request url"></p>
-    </form>
-    <code>{{result}}</code>
-    <p><a href={{url}}>{{url}}</a></p>
-    <h3>Request exemple</h3>
-    <p>
-        <b>station "Le Gat-Mort à Saint-Selve"</b> <br>
-        station:  O965000101 <br>
-        hydrological measure: water tide <br>
-        days before: 5 <br>
-    </p>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar logo" href={{url_for('home')}}>HydrEAUviewer API</a>
+            <div class="dropdown">
+                <button class="dropbtn">Data</button>
+                <div class="dropdown-content">
+                    <a href={{url_for('stations')}}>Stations</a>
+                    <a href={{url_for('elab')}}>Elaborated observations</a>
+                    <a href={{url_for('tr')}}>Real time observations</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Real time hydrological data</h1>
+        <h3>Description</h3>
+        <p>
+            hydrological data in real time, water flow "Q" and tide "H" recorded by the hydrological stations.
+        </p>
+        <h3>filter request</h3>
+        <form action={{url_for('result', domain="tr")}} method = "POST">
+            <p>code station <input type="text" name="station"></p>
+            <p>hydrological measure <select name="hydro_measure_tr">
+                <option value="H">water tide</option>
+                <option value="Q">water flow</option>
+            </select></p>
+            <p>time step (minute) <input type="number" name="time_step" min="10" max="60" step="10" value="10"></p>
+            <p>days before <input type="number" name="days_before" min="1" step="1" value="5"></p>
+            <p><input type="submit" value="creat request url"></p>
+        </form>
+        <code>{{result}}</code>
+        <p><a href={{url}}>{{url}}</a></p>
+        <h3>Request exemple</h3>
+        <p>
+            <b>station "Le Gat-Mort à Saint-Selve"</b> <br>
+            code station:  O965000101 <br>
+            hydrological measure: water tide <br>
+            time step: 10
+            days before: 5 <br>
+        </p>
+    </div>
 </body>
 </html>

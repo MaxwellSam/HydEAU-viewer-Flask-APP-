@@ -7,29 +7,41 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/defaultStyle.css') }}">
 </head>
 <body>
-    <h1>HydrEAUviewer API</h1>
-    <h2>Hydrological stations</h2>
-    <p><a href={{url_for('root')}}>home page</a></p>
-    <h3>Description</h3>
-    <p>
-        Enter coordinates and distance to find stations located around this specific point.  
-    </p>
-    <h3>filter request</h3>
-    <form action={{url_for('result', domain="stations")}} method = "POST">
-        <p>latitude <input type="text" name="lat"></p>
-        <p>longitude <input type="text" name="long"></p>
-        <p>distance <input type="text" name="dist"></p>
-        <p><input type="submit" value="result"></p>
-    </form>
-    <code>{{result}}</code>
-    <p><a href={{url}}>{{url}}</a></p>
-    <h3>Request exemple</h3>
-    <p>
-        <b>Bordeaux coodinates</b> <br>
-        latitude:  44.837789 <br>
-        longitude: -0.57918 <br>
-        distance: 30 <br>
-    </p>
-
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar logo" href={{url_for('home')}}>HydrEAUviewer API</a>
+            <div class="dropdown">
+                <button class="dropbtn">Data</button>
+                <div class="dropdown-content">
+                    <a href={{url_for('stations')}}>Stations</a>
+                    <a href={{url_for('elab')}}>Elaborated observations</a>
+                    <a href={{url_for('tr')}}>Real time observations</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Hydrological stations</h1>
+        <h3>Description</h3>
+        <p>
+            Enter coordinates and distance to find stations located around this specific point.  
+        </p>
+        <h3>filter request</h3>
+        <form action={{url_for('result', domain="stations")}} method = "POST">
+            <p>latitude <input type="number" name="lat" step="0.000001"></p>
+            <p>longitude <input type="number" name="long" step="0.000001"></p>
+            <p>distance <input type="number" name="dist" min="0"></p>
+            <p><input type="submit" value="result"></p>
+        </form>
+        <code>{{result}}</code>
+        <p><a href={{url}}>{{url}}</a></p>
+        <h3>Request exemple</h3>
+        <p>
+            <b>Bordeaux coodinates</b> <br>
+            latitude:  44.837789 <br>
+            longitude: -0.57918 <br>
+            distance: 30 <br>
+        </p>
+    </div>
 </body>
 </html>

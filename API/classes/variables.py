@@ -146,7 +146,8 @@ translate_kw_hydro_tr = {
     "hydro_measure_tr":"grandeur_hydro",
     "days_before":"date_debut_obs",
     "months_before":"date_debut_obs",
-    "years_before":"date_debut_obs"
+    "years_before":"date_debut_obs",
+    "time_step":"timestep"
 }
 
 ## url hydro tr ##

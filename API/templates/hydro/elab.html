@@ -7,26 +7,39 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/defaultStyle.css') }}">
 </head>
 <body>
-    <h1>HydrEAUviewer API</h1>
-    <h2>Elaborated hydrological data</h2>
-    <p><a href={{url_for('root')}}>home page</a></p>
-    <h3>Description</h3>
-    <p>
-        The elaborated hydrological data are the daily water flow "QmJ" recorded by the hydrological stations.
-    </p>
-    <h3>filter request</h3>
-    <form action={{url_for('result', domain="elab")}} method = "POST">
-        <p>station <input type="text" name="station"></p>
-        <p>days before <input type="text" name="days_before"></p>
-        <p><input type="submit" value="result"></p>
-    </form>
-    <code>{{result}}</code>
-    <p><a href={{url}}>{{url}}</a></p>
-    <h3>Request exemple</h3>
-    <p>
-        <b>station "Le Gat-Mort à Saint-Selve"</b> <br>
-        station:  O965000101 <br>
-        days before: 5 <br>
-    </p>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar logo" href={{url_for('root')}}>HydrEAUviewer API</a>
+            <div class="dropdown">
+                <button class="dropbtn">Data</button>
+                <div class="dropdown-content">
+                    <a href={{url_for('stations')}}>Stations</a>
+                    <a href={{url_for('elab')}}>Elaborated observations</a>
+                    <a href={{url_for('tr')}}>Real time observations</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Elaborated hydrological data</h1>
+        <h3>Description</h3>
+        <p>
+            The elaborated hydrological data represent the daily water flow "QmJ" recorded by the hydrological stations.
+        </p>
+        <h3>filter request</h3>
+        <form action={{url_for('result', domain="elab")}} method = "POST">
+            <p>station <input type="text" name="station"></p>
+            <p>days before <input type="number" name="days_before" min="1" step="1" value="5"></p>
+            <p><input type="submit" value="result"></p>
+        </form>
+        <code>{{result}}</code>
+        <p><a href={{url}}>{{url}}</a></p>
+        <h3>Request exemple</h3>
+        <p>
+            <b>station "Le Gat-Mort à Saint-Selve"</b> <br>
+            station:  O965000101 <br>
+            days before: 5 <br>
+        </p>
+    </div>
 </body>
 </html>
