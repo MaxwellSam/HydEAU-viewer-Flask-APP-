@@ -24,7 +24,7 @@ class Hydro:
     Daughters: Hydro_Stations, Hydro_Obs
     Description: Generate hubEAU url to get stations around a coordinates point.
     """
-    def url_hubeau_to_json(self):
+    def get_json(self):
         """
         Description: Fetch data from hubEAU with the url and convert the response to json.
                      steps:

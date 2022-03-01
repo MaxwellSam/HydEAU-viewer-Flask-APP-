@@ -27,7 +27,7 @@
             hydrological data in real time, water flow "Q" and tide "H" recorded by the hydrological stations.
         </p>
         <h3>filter request</h3>
-        <form action={{url_for('result', domain="tr")}} method = "POST">
+        <form action={{url_for('tr')}} method = "POST">
             <p>code station <input type="text" name="station"></p>
             <p>hydrological measure <select name="hydro_measure_tr">
                 <option value="H">water tide</option>
@@ -37,8 +37,11 @@
             <p>days before <input type="number" name="days_before" min="1" step="1" value="5"></p>
             <p><input type="submit" value="creat request url"></p>
         </form>
-        <code>{{result}}</code>
-        <p><a href={{url}}>{{url}}</a></p>
+        <p>
+            Request Arguments: <br><code>{{result}}</code><br>
+            url HubEAU: <br><a href={{url_hubeau}}>{{url_hubeau}}</a><br>
+            url hydrEAUviewer API: <br><a href={{url_API}}>{{url_API}}</a>
+        </p>
         <h3>Request exemple</h3>
         <p>
             <b>station "Le Gat-Mort à Saint-Selve"</b> <br>

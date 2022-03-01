@@ -27,14 +27,17 @@
             Enter coordinates and distance to find stations located around this specific point.  
         </p>
         <h3>filter request</h3>
-        <form action={{url_for('result', domain="stations")}} method = "POST">
+        <form action={{url_for('stations')}} method = "POST">
             <p>latitude <input type="number" name="lat" step="0.000001"></p>
             <p>longitude <input type="number" name="long" step="0.000001"></p>
             <p>distance <input type="number" name="dist" min="0"></p>
             <p><input type="submit" value="result"></p>
         </form>
-        <code>{{result}}</code>
-        <p><a href={{url}}>{{url}}</a></p>
+        <p>
+            Request Arguments: <br><code>{{result}}</code><br>
+            url HubEAU: <br><a href={{url_hubeau}}>{{url_hubeau}}</a><br>
+            url hydrEAUviewer API: <br><a href={{url_API}}>{{url_API}}</a>
+        </p>
         <h3>Request exemple</h3>
         <p>
             <b>Bordeaux coodinates</b> <br>

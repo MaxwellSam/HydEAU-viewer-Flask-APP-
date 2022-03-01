@@ -8,7 +8,8 @@ Date: 02/2022
 
 ## Imports ##
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for
+from numpy import empty
  
 # local modules #
 
@@ -29,46 +30,44 @@ API = Flask(__name__)
 def home():
     return  render_template("homePage.html")
 
-@API.route("/hydro/stations")
+@API.route("/hydro/stations", methods=['POST', 'GET'])
 def stations():
-    # if request.method == 'POST':
-    #     result = request.form.to_dict()
-    #     data_object = data.Hydro_Stations(result)
-    #     return render_template("hydro/stations.html", result = result, url=data_object.get_url())
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_object = data.Hydro_Stations(result)
+        return render_template("hydro/stations.html", result = result, url_hubeau=data_object.get_url(), url_API=tb.args_to_request(url_for('hydro_data', domain='stations'),result))
     return render_template("hydro/stations.html")
 
 @API.route("/hydro/elab", methods=['POST', 'GET'])
 def elab():
-    # if request.method == 'POST':
-    #     result = request.form.to_dict()
-    #     data_object = data.Hydro_Obs_Elab(result)
-    #     return render_template("hydro/elab.html", result = result, url=data_object.get_url())
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_object = data.Hydro_Obs_Elab(result)
+        return render_template("hydro/elab.html", result = result, url_hubeau=data_object.get_url(), url_API=tb.args_to_request(url_for('hydro_data', domain='elab'),result))
     return render_template("hydro/elab.html")
 
 @API.route("/hydro/tr", methods=['POST', 'GET'])
 def tr():
-    # if request.method == 'POST':
-    #     result = request.form.to_dict()
-    #     data_object = data.Hydro_Obs_Tr(result)
-    #     return render_template("hydro/tr.html", result = result, url=data_object.get_url())
-    return render_template("hydro/tr.html")
-
-@API.route("/hydro/<domain>/result", methods=['POST', 'GET'])
-def result(domain):
     if request.method == 'POST':
         result = request.form.to_dict()
-        if domain == "stations":
-            data_object = data.Hydro_Stations(result)
-        elif domain == "elab":
-            data_object = data.Hydro_Obs_Elab(result)
-        elif domain == "tr":
-            data_object = data.Hydro_Obs_Tr(result)
+        data_object = data.Hydro_Obs_Tr(result)
+        return render_template("hydro/tr.html", result = result, url_hubeau=data_object.get_url(), url_API=tb.args_to_request(url_for('hydro_data', domain='tr'),result))
+    return render_template("hydro/tr.html")
+
+@API.route("/hydro/<domain>/data")
+def hydro_data(domain):
+    result = request.args
+    if domain == "stations":
+        data_object = data.Hydro_Stations(result)
+    if domain == "elab":
+        data_object = data.Hydro_Obs_Elab(result)
+    if domain == "tr":
+        data_object = data.Hydro_Obs_Tr(result)
+    return data_object.get_json() 
         
-    # return render_template("hydro/{}.html".format(domain), result = result)
-    return render_template("hydro/{}.html".format(domain), result = result, url=data_object.get_url())
 
 # ---------------------------------- Run API --------------------------------- #
 
 if __name__ == "__main__":
-    # API.run(host='0.0.0.0', port=5000, debug=True)
-    API.run(debug=True)
+    API.run(host='0.0.0.0', port=5000, debug=True)
+    # API.run(debug=True)
