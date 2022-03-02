@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a class="navbar logo" href={{url_for('home')}}>HydrEAUviewer API</a>
+            <a class="navbar logo" href={{url_for('api')}}>HydrEAUviewer API</a>
             <div class="dropdown">
                 <button class="dropbtn">Data</button>
                 <div class="dropdown-content">
@@ -21,16 +21,21 @@
         </div>
     </nav>
     <div class="container">
-        <h1>Elaborated hydrological data</h1>
+        <h1>Real time hydrological data</h1>
         <h3>Description</h3>
         <p>
-            The elaborated hydrological data represent the daily water flow "QmJ" recorded by the hydrological stations.
+            hydrological data in real time, water flow "Q" and tide "H" recorded by the hydrological stations.
         </p>
         <h3>filter request</h3>
-        <form action={{url_for('elab')}} method = "POST">
-            <p>station <input type="text" name="station"></p>
+        <form action={{url_for('tr')}} method = "POST">
+            <p>code station <input type="text" name="station"></p>
+            <p>hydrological measure <select name="hydro_measure_tr">
+                <option value="H">water tide</option>
+                <option value="Q">water flow</option>
+            </select></p>
+            <p>time step (minute) <input type="number" name="time_step" min="10" max="60" step="10" value="10"></p>
             <p>days before <input type="number" name="days_before" min="1" step="1" value="5"></p>
-            <p><input type="submit" value="result"></p>
+            <p><input type="submit" value="creat request url"></p>
         </form>
         <p>
             Request Arguments: <br><code>{{result}}</code><br>
@@ -40,7 +45,9 @@
         <h3>Request exemple</h3>
         <p>
             <b>station "Le Gat-Mort à Saint-Selve"</b> <br>
-            station:  O965000101 <br>
+            code station:  O965000101 <br>
+            hydrological measure: water tide <br>
+            time step: 10
             days before: 5 <br>
         </p>
     </div>
