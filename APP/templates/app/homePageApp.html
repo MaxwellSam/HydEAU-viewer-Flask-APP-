@@ -58,13 +58,19 @@
                      <select id="hydro_measure" name="hydro_measure">
                         <option value="H">water tide (H)</option>
                         <option value="Q">flow (Q)</option>
-                        <option value="Q">daily flow (Q)</option>
+                        <option value="QmJ">daily flow (QmJ)</option>
                      </select>
                   </p>
                   <p>
                      <label for="days_before">Historic data (days)</label>
                      <input type="number" name="days_before" min="1" step="1" value="5">
                   </p>
+               </div>
+               <div class="p-3">
+                  <p id="test-1"></p>
+                  <p id="test-2"></p>
+                  <p id="test-3"></p>
+                  <p id="test-4"></p>
                </div>
             </div>
             <div class="col-md-8">
@@ -79,7 +85,7 @@
         }).addTo(map);
      </script> -->
    <script src="{{url_for('static',filename='/js/map.js')}}"></script>
-   <script src="{{url_for('static',filename='/js/main.js')}}"></script>
+   <!-- <script src="{{url_for('static',filename='/js/main.js')}}"></script> -->
     
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
