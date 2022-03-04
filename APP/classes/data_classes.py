@@ -8,13 +8,15 @@ Date: 02/2022
 
 ## Imports ## 
 
+from git import Object
 import requests
 import json
 from datetime import date, timedelta
 
 # local imports 
 
-import classes.variables as var 
+import modules.variables as var 
+import modules.toolbox as tb
 
 # =================================== HubEAU data hydro ====================================== #
 
@@ -24,7 +26,7 @@ class Hydro:
     Daughters: Hydro_Stations, Hydro_Obs
     Description: Generate hubEAU url to get stations around a coordinates point.
     """
-    def get_json(self):
+    def fetch_json(self):
         """
         Description: Fetch data from hubEAU with the url and convert the response to json.
                      steps:
@@ -57,7 +59,10 @@ class Hydro:
                 data_next = file_next["data"]
                 data += data_next
                 next = file_next[next]
-        return {i:data[i] for i in range(len(data))}
+        self.data = {i:data[i] for i in range(len(data))}
+
+    def get_json(self):
+        return self.data
     
     def get_url(self):
         return self.url
@@ -76,6 +81,7 @@ class Hydro_Stations(Hydro):
     def __init__(self, args):
         self.args = args
         self.__generate_url_hubeau()
+        self.fetch_json()
     
     def __generate_url_hubeau(self):
         """
@@ -94,6 +100,28 @@ class Hydro_Stations(Hydro):
             except ValueError as ve:
                 print("Error: class \'Hydro_Stations\' method \'generate_url_hubeau' => key {} not valid.".format(k))
     
+    def get_stations(self):
+        return tb.get_list_stations(self.data)
+
+    def get_stations_with_data(self, data_type):
+        list_stations = tb.get_list_stations(self.data)
+        return tb.get_list_stations_from_hydro_data(list_stations, data_type)
+
+    def fetch_json(self):
+        super().fetch_json()
+        stations_Q = self.get_stations_with_data('Q')
+        stations_H = self.get_stations_with_data('H')
+        stations_QmJ = self.get_stations_with_data('QmJ')
+        for station in self.data.values():
+            station['hydro_measure_av'] = []
+            if station['code_station'] in stations_Q:
+                station['hydro_measure_av'].append('Q')
+            if station['code_station'] in stations_H:
+                station['hydro_measure_av'].append('H')
+            if station['code_station'] in stations_QmJ:
+                station['hydro_measure_av'].append('QmJ')
+
+    
     
 class Hydro_Obs(Hydro):
     """
@@ -106,6 +134,8 @@ class Hydro_Obs(Hydro):
     
     def __init__(self):
         self.__generate_url_hubeau()
+        self.fetch_json()
+        # self.data = self.get_json()
 
     def __generate_url_hubeau(self):
         """
@@ -158,33 +188,6 @@ class Hydro_Obs_Tr(Hydro_Obs):
 
         
 
-# test 
-
-args = {
-    "long":"-0.57918",
-    "lat":"44.837789",
-    "dist":"1000"
-    } 
-
-args2 = {
-    "stations":"A021005050",
-    "days_before":"5"
-}         
-
-## Test ## note : works if => import variables as var (not import classes.variables as var)
-
-# obj = Hydro_Stations(args)
-# print(obj.get_url())
-# # print(obj.url_hubeau_to_json())
-# obj2 = Hydro_Obs_Elab(args2)
-# print("\n", obj2.get_url())
-
-# print("\n", obj2.url_hubeau_to_json())
-
-# obj3 = Hydro_Obs_Tr(args2)
-
-# print("\n", obj3.get_url())
-# print("\n", obj3.url_hubeau_to_json())
 
 
 

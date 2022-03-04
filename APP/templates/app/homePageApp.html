@@ -8,6 +8,8 @@
    <!-- leaflet -->
    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>   <link rel="stylesheet" href="{{ url_for('static',filename='styles/defaultStyle.css') }}">
+   <!-- Awersome-Markers -->
+   <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
    <title>HydrEAUviewer APP</title>
    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/000000/water.png"/>
 </head>
@@ -46,14 +48,14 @@
                   </p>
                   <p>
                      <label for="dist">Distance (km)</label>
-                     <input type="number" name="dist" min="0" value="30">
+                     <input id="dist" type="number" name="dist" min="0" value="30">
                   </p>
                </div>
                <div class="p-3">
                   <h4 class="p-2">Hydrological observations</h4>
                   <p>
                      <label for="lat">Measure type</label>
-                     <select name="hydro_measure_tr">
+                     <select id="hydro_measure" name="hydro_measure">
                         <option value="H">water tide (H)</option>
                         <option value="Q">flow (Q)</option>
                         <option value="Q">daily flow (Q)</option>
@@ -70,14 +72,14 @@
             </div>
         </div>
      </div>
-     <script>
+     <!-- <script>
         var map = L.map('map').setView([0,0], 1);
-        L.tilelayer('https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=LHjfLlxpJcb3lcunyka2', {
+        L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=LHjfLlxpJcb3lcunyka2', {
            attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
         }).addTo(map);
-     </script>
-   <!-- <script src="{{url_for('static',filename='/js/map.js')}}"></script>
-   <script src="{{url_for('static',filename='/js/main.js')}}"></script> -->
+     </script> -->
+   <script src="{{url_for('static',filename='/js/map.js')}}"></script>
+   <script src="{{url_for('static',filename='/js/main.js')}}"></script>
     
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

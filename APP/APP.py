@@ -46,7 +46,8 @@ def stations():
     if request.method == 'POST':
         result = request.form.to_dict()
         data_object = data.Hydro_Stations(result)
-        return render_template("api/hydro/stations.html", result = result, url_hubeau=data_object.get_url(), url_API=tb.args_to_request(url_for('hydro_data', domain='stations'),result))
+        data_stations = data_object.get_json()
+        return render_template("api/hydro/stations.html", result = result, url_hubeau=data_object.get_url(), url_API=tb.args_to_request(url_for('hydro_data', domain='stations'),result), stations=data_object.get_stations(), stations_with_data=data_object.get_stations_with_data("Q"))
     return render_template("api/hydro/stations.html")
 
 @APP.route("/API/hydro/elab", methods=['POST', 'GET'])
@@ -74,7 +75,7 @@ def hydro_data(domain):
         data_object = data.Hydro_Obs_Elab(result)
     if domain == "tr":
         data_object = data.Hydro_Obs_Tr(result)
-    return data_object.get_json() 
+    return data_object.data
 
 # ---------------------------------- Run APP --------------------------------- #
 
