@@ -9,8 +9,8 @@
 // Markers color
 
 var blueIcon = new L.Icon({
-	iconUrl: 'img/marker-icon-2x-blue.png',
-	shadowUrl: 'img/marker-shadow.png',
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+	shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
 	iconSize: [25, 41],
 	iconAnchor: [12, 41],
 	popupAnchor: [1, -34],
@@ -18,8 +18,8 @@ var blueIcon = new L.Icon({
 });
 
 var redIcon = new L.Icon({
-	iconUrl: 'img/marker-icon-2x-red.png',
-	shadowUrl: 'img/marker-shadow.png',
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+	shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
 	iconSize: [25, 41],
 	iconAnchor: [12, 41],
 	popupAnchor: [1, -34],
@@ -27,141 +27,114 @@ var redIcon = new L.Icon({
 });
 
 var greenIcon = new L.Icon({
-	iconUrl: 'img/marker-icon-2x-green.png',
-	shadowUrl: 'img/marker-shadow.png',
-	iconSize: [25, 41],
-	iconAnchor: [12, 41],
-	popupAnchor: [1, -34],
-	shadowSize: [41, 41]
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
 });
 
 // ----------------------------- Usefull methods -----------------------------
 
 const attrib_color = (station, hydro) => {
-    if (hydro in station.hydro_measure_av){
+    console.log(station.hydro_measure_av.includes(hydro))
+    if (station.hydro_measure_av.includes(hydro)){
         return greenIcon
     } 
     else {
-        return redIcon
+        return blueIcon
     }
-}
-
-const add_markers = (hydro, map, data_stations) => {
-    
-    Object.values(data_stations).map((station) => {
-        L.marker(
-            [station.latitude_station, station.longitude_station],
-            {Icon:attrib_color(station, hydro)}
-        ).addTo(map).bindPopup(station.libelle_station)
-    })
 }
 
 const generate_arg_req = (args) => {
     console.log(args);
     var req = [];
-
     for (let k in args){
         console.log(k);
         req.push(k+"="+args[k])
     } 
-    // args.map((arg) => {
-    //     req.push(key+"="+value)
-    // });
-    console.log(req);
     return "?"+req.join("&");
 }
 
 // -------------------------------- Creat Map --------------------------------
 
-/**
- * load the map and add markers according to data stations
- * @param {string} long longitude for map center
- * @param {string} lat latitude for map center
- * @param {JSON} data_stations data of stations to display on map
- */
-const loadMap = (long, lat, hydro, data_stations) => {
-    console.log("--->", hydro);
-    var map = L.map('map')
-    map.setView([lat,long], 12)
-    L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=LHjfLlxpJcb3lcunyka2', {
-           attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-        }).addTo(map);
+class MapStations {
+    // =============== Inputs user ==================
+    long = document.getElementById("long");
+    lat = document.getElementById("lat");
+    dist = document.getElementById("dist");
+    hydro = document.getElementById("hydro_measure");
+    // ============== Map elements ==================
+    map = L.map('map');
+    markersElements;
 
-    add_markers(hydro, map, data_stations)
-}
+    constructor(){
+        this.initialize();
+    }
 
-const initializeMap = (long, lat, dist, hydro) => {
-    let args_req = generate_arg_req({"long":long.value, "lat":lat.value, "dist":dist.value})
-    // console.log(args_req);
-    // console.log(`${window.origin}`+'/API/hydro/stations/data'+args_req);
-    fetch(`${window.origin}`+'/API/hydro/stations/data'+args_req) 
+    // ================= Methods ====================
+    addStations(url){
+        // initialize markers group 
+        this.markersElements = L.layerGroup().addTo(this.map);
+        // fetch data and add station markers
+        console.log(url)
+        fetch(url) 
         .then((resp) => resp.json())
         .then((_data) => {
-            // console.log(Object.values(_data))
-            // console.log(Array.from(this.PaymentResponse.))
-            loadMap(long.value, lat.value, hydro.value, _data)
-        })
+            Object.values(_data).map((station) => {
+                L.marker(
+                    [station.latitude_station, station.longitude_station],
+                    {icon:attrib_color(station, this.hydro.value)}
+                ).addTo(this.markersElements).bindPopup(station.libelle_station);
+            });
+        });
+    }
+    // ================= Methods ====================
+    initialize(){
+        // generate url for API requesting
+        let url = `${window.origin}` + '/API/hydro/stations/data' + generate_arg_req({"long":this.long.value, "lat":this.lat.value, "dist":this.dist.value});
+        // set Map view and tile
+        this.map.setView([this.lat.value,this.long.value], 12);
+        L.tileLayer(
+            'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=LHjfLlxpJcb3lcunyka2', 
+            {
+                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+            }).addTo(this.map);
+        // fetch data stations and add markers
+        this.addStations(url);
+    }
+
+    refresh(){
+        // generate url for API requesting
+        let url = `${window.origin}` + '/API/hydro/stations/data' + generate_arg_req({"long":this.long.value, "lat":this.lat.value, "dist":this.dist.value});
+        // reset Map view
+        this.map.setView([lat.value,long.value], 12);
+        // remove last markers
+        this.map.removeLayer(this.markersElements);
+        // fetch data stations and add markers
+        this.addStations(url);
+    }
 }
 
-const reloadmap = () => {
-    let long = document.getElementById("long")
-    let lat = document.getElementById("lat")
-    let dist = document.getElementById("dist")
-    let hydro = document.getElementById("hydro_measure")
-
-    // map.off()
-    // let map = document.getElementById('map');
-    // let parent = map.parentNode
-    // map.remove()
-    // let new_el = document.createElement('div')
-    // new_el.id = "map"
-    // parent.appendChild(new_el)
-    // let map = document.getElementById('map');
-    // let firstChild = map.firstChild;
-    // console.log(firstChild)
-    // // map.querySelectorAll('*').forEach(n => n.remove());
-    // map.removeChild(map.firstChild);
-    // firstChild = map.firstChild;
-    // console.log(firstChild)
-    // initializeMap(map, long, lat, dist, hydro)
-    initializeMap(long, lat, dist, hydro)
-}
-
-// ---------------------------------- main ----------------------------------
+// ------------------------------------- Inputs  --------------------------------------
 
 var long = document.getElementById("long");
 var lat = document.getElementById("lat");
 var dist = document.getElementById("dist");
 var hydro = document.getElementById("hydro_measure");
 
-// var map = L.map('map');
+// ---------------------------------- Initialize Map  ---------------------------------- 
 
-initializeMap(long, lat, dist, hydro);
+map = new MapStations()
 
-// dist.addEventListener('change', () => {reloadmap(), test_event()});
-// // dist.addEventListner('change', uploadmap(map));
-// long.addEventListener('change', () => {reloadmap(), test_event()});
-// lat.addEventListener('change', () => {reloadmap(), test_event()});
-// hydro.addEventListener('change', () => {reloadmap(); test_event();});
+// ----------------------------------- Event Listener  ---------------------------------
 
-// test eventListener
+dist.addEventListener('change', () => {map.refresh()});
+long.addEventListener('change', () => {map.refresh()});
+lat.addEventListener('change', () => {map.refresh()});
+hydro.addEventListener('change', () => {map.refresh()});
 
-var test_1 = document.getElementById('test-1')
-var test_2 = document.getElementById('test-2')
-var test_3 = document.getElementById('test-3')
-var test_4 = document.getElementById('test-4')
-
-const test_event = () => {
-    test_1.innerHTML = "long = "+long.value;
-    test_2.innerHTML = "lat = "+lat.value;
-    test_3.innerHTML = "dist = "+dist.value;
-    test_4.innerHTML = "hydro = "+hydro.value;
-}
-
-dist.addEventListener('change', () => test_event());
-long.addEventListener('change', () => test_event());
-lat.addEventListener('change', () => test_event());
-hydro.addEventListener('change', () => test_event());
 
 
 
