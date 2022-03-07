@@ -6,6 +6,9 @@
 
 // -------------------------------- variables --------------------------------
 
+// zoom 
+var zoom = 9
+
 // Markers color
 
 var blueIcon = new L.Icon({
@@ -38,7 +41,6 @@ var greenIcon = new L.Icon({
 // ----------------------------- Usefull methods -----------------------------
 
 const attrib_color = (station, hydro) => {
-    console.log(station.hydro_measure_av.includes(hydro))
     if (station.hydro_measure_av.includes(hydro)){
         return greenIcon
     } 
@@ -48,10 +50,8 @@ const attrib_color = (station, hydro) => {
 }
 
 const generate_arg_req = (args) => {
-    console.log(args);
     var req = [];
     for (let k in args){
-        console.log(k);
         req.push(k+"="+args[k])
     } 
     return "?"+req.join("&");
@@ -60,15 +60,14 @@ const generate_arg_req = (args) => {
 // -------------------------------- Creat Map --------------------------------
 
 class MapStations {
-    // =============== Inputs user ==================
-    long = document.getElementById("long");
-    lat = document.getElementById("lat");
-    dist = document.getElementById("dist");
-    hydro = document.getElementById("hydro_measure");
-    // ============== Map elements ==================
+    // =============== Attributes ===================
+    // Inputs user
+    params = document.getElementById("params");
+    // Map elements 
     map = L.map('map');
     markersElements;
 
+    // =============== Constructor ==================
     constructor(){
         this.initialize();
     }
@@ -78,24 +77,24 @@ class MapStations {
         // initialize markers group 
         this.markersElements = L.layerGroup().addTo(this.map);
         // fetch data and add station markers
-        console.log(url)
         fetch(url) 
         .then((resp) => resp.json())
         .then((_data) => {
             Object.values(_data).map((station) => {
                 L.marker(
                     [station.latitude_station, station.longitude_station],
-                    {icon:attrib_color(station, this.hydro.value)}
+                    {icon:attrib_color(station, this.params.hydro_measure.value)}
                 ).addTo(this.markersElements).bindPopup(station.libelle_station);
             });
         });
     }
-    // ================= Methods ====================
+    
+    // -------------- init & refresh -----------------
     initialize(){
         // generate url for API requesting
-        let url = `${window.origin}` + '/API/hydro/stations/data' + generate_arg_req({"long":this.long.value, "lat":this.lat.value, "dist":this.dist.value});
+        let url = `${window.origin}` + '/API/hydro/stations/data' + generate_arg_req({"long":this.params.long.value, "lat":this.params.lat.value, "dist":this.params.dist.value});
         // set Map view and tile
-        this.map.setView([this.lat.value,this.long.value], 12);
+        this.map.setView([this.params.lat.value,this.params.long.value], zoom);
         L.tileLayer(
             'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=LHjfLlxpJcb3lcunyka2', 
             {
@@ -107,9 +106,9 @@ class MapStations {
 
     refresh(){
         // generate url for API requesting
-        let url = `${window.origin}` + '/API/hydro/stations/data' + generate_arg_req({"long":this.long.value, "lat":this.lat.value, "dist":this.dist.value});
+        let url = `${window.origin}` + '/API/hydro/stations/data' + generate_arg_req({"long":this.params.long.value, "lat":this.params.lat.value, "dist":this.params.dist.value});
         // reset Map view
-        this.map.setView([lat.value,long.value], 12);
+        this.map.setView([this.params.lat.value,this.params.long.value], zoom);
         // remove last markers
         this.map.removeLayer(this.markersElements);
         // fetch data stations and add markers
@@ -119,10 +118,8 @@ class MapStations {
 
 // ------------------------------------- Inputs  --------------------------------------
 
-var long = document.getElementById("long");
-var lat = document.getElementById("lat");
-var dist = document.getElementById("dist");
-var hydro = document.getElementById("hydro_measure");
+var params = document.getElementById("params")
+var submit_params = document.getElementById("submit_params")
 
 // ---------------------------------- Initialize Map  ---------------------------------- 
 
@@ -130,11 +127,7 @@ map = new MapStations()
 
 // ----------------------------------- Event Listener  ---------------------------------
 
-dist.addEventListener('change', () => {map.refresh()});
-long.addEventListener('change', () => {map.refresh()});
-lat.addEventListener('change', () => {map.refresh()});
-hydro.addEventListener('change', () => {map.refresh()});
-
+submit_params.addEventListener('click', () => {map.refresh()})
 
 
 

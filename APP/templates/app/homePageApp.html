@@ -35,42 +35,43 @@
      <div class="container-fluid vh-100">
         <div class="row justify-content-center h-100">
             <div class="col-md-4 bg-light" id="yellow">
-               <h3 class="text-center p-3">Parameters</h3>
+               <form id="params">
+                 <h3 class="text-center p-3">Parameters</h3>
+                 <div class="p-3">
+                    <h4 class="p-2">Stations localisation</h4>
+                    <p>
+                       <label for="lat">Latitude</label>
+                       <input id="lat" type="number" name="lat" step="0.000001" value="44.837789">
+                     </p>
+                     <p>
+                        <label for="long">Longitude</label>
+                        <input id="long" type="number" name="long" step="0.000001" value="-0.57918">
+                     </p>
+                     <p>
+                        <label for="dist">Distance (km)</label>
+                        <input id="dist" type="number" name="dist" min="0" value="30">
+                     </p>
+                  </div>
+                  <div class="p-3">
+                     <h4 class="p-2">Hydrological observations</h4>
+                     <p>
+                        <label for="lat">Measure type</label>
+                        <select id="hydro_measure" name="hydro_measure">
+                           <option value="H">water tide (H)</option>
+                           <option value="Q">flow (Q)</option>
+                           <option value="QmJ">daily flow (QmJ)</option>
+                        </select>
+                     </p>
+                     <p>
+                        <label for="days_before">Historic data (days)</label>
+                        <input type="number" name="days_before" min="1" step="1" value="5">
+                     </p>
+                  </div>
+                  <!-- <input id="submit_params" type="submit" value="refresh map"> -->
+                  <!-- <button id="submit_params" type="submit">refresh</button> -->
+               </form>
                <div class="p-3">
-                  <h4 class="p-2">Stations localisation</h4>
-                  <p>
-                     <label for="lat">Latitude</label>
-                     <input id="lat" type="number" name="lat" step="0.000001" value="44.837789">
-                  </p>
-                  <p>
-                     <label for="long">Longitude</label>
-                     <input id="long" type="number" name="long" step="0.000001" value="-0.57918">
-                  </p>
-                  <p>
-                     <label for="dist">Distance (km)</label>
-                     <input id="dist" type="number" name="dist" min="0" value="30">
-                  </p>
-               </div>
-               <div class="p-3">
-                  <h4 class="p-2">Hydrological observations</h4>
-                  <p>
-                     <label for="lat">Measure type</label>
-                     <select id="hydro_measure" name="hydro_measure">
-                        <option value="H">water tide (H)</option>
-                        <option value="Q">flow (Q)</option>
-                        <option value="QmJ">daily flow (QmJ)</option>
-                     </select>
-                  </p>
-                  <p>
-                     <label for="days_before">Historic data (days)</label>
-                     <input type="number" name="days_before" min="1" step="1" value="5">
-                  </p>
-               </div>
-               <div class="p-3">
-                  <p id="test-1"></p>
-                  <p id="test-2"></p>
-                  <p id="test-3"></p>
-                  <p id="test-4"></p>
+                  <button id="submit_params" type="submit">refresh</button>
                </div>
             </div>
             <div class="col-md-8">
