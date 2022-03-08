@@ -1,10 +1,13 @@
 """
 File: variables.py
-Path: ./API/classes/variables.py
+Path: ./modules/variables.py
 Description: define variables for classes (url, fields, etc.) 
 Author: Sam Maxwell
 Date: 02/2022
 """
+#####################################################################################
+#                                        API                                        #
+#####################################################################################
 
 # ====================================== URL ====================================== #
 """
@@ -154,6 +157,19 @@ translate_kw_hydro_tr = {
 
 hydro_tr_url = url_assembly(url_bases_hydro_tr, options_hydro_tr, fields_hydro_tr)
 
-# print(hydro_stations_url)
-# print(hydro_elab_url)
-# print(hydro_tr_url)
+
+#####################################################################################
+#                                        APP                                        #
+#####################################################################################
+
+# ============================== Map default variables ============================ #
+
+default_lat = 44.837789
+default_long = -0.57918
+default_dist = 30
+default_hydro_measures = {
+    "water tide (H)":"H",
+    "flow (Q)":"Q",
+    "daily flow (QmJ)":"QmJ"
+    }
+default_data_hist = 5

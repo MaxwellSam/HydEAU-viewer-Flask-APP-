@@ -13,7 +13,7 @@ from flask import Flask, request, render_template, url_for
 # local modules #
 
 import modules.toolbox as tb
-# import modules.variables as var
+import modules.variables as var
 
 # classes # 
 
@@ -33,7 +33,7 @@ def home():
 
 @APP.route("/APP")
 def app():
-    return render_template("app/homePageApp.html")
+    return render_template("app/homePageApp.html", lat=var.default_lat, long=var.default_long, dist=var.default_dist, hydro_measures=var.default_hydro_measures, data_hist=var.default_data_hist)
 
 # ------------------------------------- API ---------------------------------- #
 

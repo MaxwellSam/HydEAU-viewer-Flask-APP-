@@ -29,6 +29,15 @@ var redIcon = new L.Icon({
 	shadowSize: [41, 41]
 });
 
+var greyIcon = new L.Icon({
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+	shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
 var greenIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -42,22 +51,30 @@ var greenIcon = new L.Icon({
 
 const attrib_color = (station, hydro) => {
     if (station.hydro_measure_av.includes(hydro)){
-        return greenIcon
+        return greenIcon;
     } 
     else {
-        return blueIcon
+        return greyIcon;
     }
 }
 
 const generate_arg_req = (args) => {
     var req = [];
     for (let k in args){
-        req.push(k+"="+args[k])
+        req.push(k+"="+args[k]);
     } 
     return "?"+req.join("&");
 }
 
-// -------------------------------- Creat Map --------------------------------
+const place_graph_on_page = (station) => {
+    let graph = document.getElementById('graph');
+    let info_station = document.getElementById('info_station')
+    graph.style.display = "block";
+    info_station.innerHTML = `<b>station:</b> ${station.libelle_station}<br/><b>code:</b> ${station.code_station}`
+    
+}
+
+// -------------------------------- Map Class --------------------------------
 
 class MapStations {
     // =============== Attributes ===================
@@ -74,6 +91,8 @@ class MapStations {
 
     // ================= Methods ====================
     addStations(url){
+        // save the last marker selected to remove blue color
+        let last_marker;
         // initialize markers group 
         this.markersElements = L.layerGroup().addTo(this.map);
         // fetch data and add station markers
@@ -81,10 +100,42 @@ class MapStations {
         .then((resp) => resp.json())
         .then((_data) => {
             Object.values(_data).map((station) => {
-                L.marker(
+                let marker = L.marker(
                     [station.latitude_station, station.longitude_station],
                     {icon:attrib_color(station, this.params.hydro_measure.value)}
-                ).addTo(this.markersElements).bindPopup(station.libelle_station);
+                )
+                .addTo(this.markersElements)
+                .bindPopup("<b>"+station.libelle_station+"</b><br/>"+station.code_station)
+                .on('click', () => {
+                    if (marker.getIcon() == greenIcon){
+                        if (last_marker != null){
+                            last_marker.setIcon(greenIcon);
+                        }
+                        // infos station selected
+                        let info_Station_html = document.getElementById('station_selected');
+                        last_marker = marker;
+                        info_Station_html.innerHTML = 
+                            ` <h4 class="p-2">Station selected</h4>
+                            <p>
+                                <b>libelle:</b> ${station.libelle_station}<br/>
+                                <b>code:</b> ${station.code_station}<br/>
+                                <b>data available:</b> ${station.hydro_measure_av}
+                            </p> 
+                            <button id="button_graph" type="button" class="btn btn-dark">See graph</button> 
+                            `;
+                        // graph station selected
+                        let button_graph = document.getElementById('button_graph');
+                        button_graph.addEventListener("click", (event) => {
+                            if (event.detail)
+                            place_graph_on_page(station); 
+                            console.log("clicked on button")
+                        });
+                        console.log("ok")
+                        marker.setIcon(blueIcon)
+                    }
+                    console.log(marker.getIcon())
+                    console.log(station.code_station)
+                });
             });
         });
     }

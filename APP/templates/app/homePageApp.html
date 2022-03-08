@@ -12,6 +12,8 @@
    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
    <title>HydrEAUviewer APP</title>
    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/000000/water.png"/>
+   <!-- Chart.js -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -33,23 +35,25 @@
      </nav>
      
      <div class="container-fluid vh-100">
-        <div class="row justify-content-center h-100">
-            <div class="col-md-4 bg-light" id="yellow">
+
+        <div id="sideBar_map" class="row justify-content-center h-100">        
+            
+         <div class="col-md-3 bg-light">      
                <form id="params">
                  <h3 class="text-center p-3">Parameters</h3>
                  <div class="p-3">
                     <h4 class="p-2">Stations localisation</h4>
                     <p>
                        <label for="lat">Latitude</label>
-                       <input id="lat" type="number" name="lat" step="0.000001" value="44.837789">
+                       <input id="lat" type="number" name="lat" step="0.000001" value="{{lat}}">
                      </p>
                      <p>
                         <label for="long">Longitude</label>
-                        <input id="long" type="number" name="long" step="0.000001" value="-0.57918">
+                        <input id="long" type="number" name="long" step="0.000001" value="{{long}}">
                      </p>
                      <p>
                         <label for="dist">Distance (km)</label>
-                        <input id="dist" type="number" name="dist" min="0" value="30">
+                        <input id="dist" type="number" name="dist" min="0" value="{{dist}}">
                      </p>
                   </div>
                   <div class="p-3">
@@ -57,28 +61,37 @@
                      <p>
                         <label for="lat">Measure type</label>
                         <select id="hydro_measure" name="hydro_measure">
-                           <option value="H">water tide (H)</option>
-                           <option value="Q">flow (Q)</option>
-                           <option value="QmJ">daily flow (QmJ)</option>
+                           {% for key, value in hydro_measures.items() %}
+                           <option value={{value}}>{{key}}</option>
+                           {% endfor %}
                         </select>
                      </p>
                      <p>
                         <label for="days_before">Historic data (days)</label>
-                        <input type="number" name="days_before" min="1" step="1" value="5">
+                        <input type="number" name="days_before" min="1" step="1" value="{{data_hist}}">
                      </p>
                   </div>
-                  <!-- <input id="submit_params" type="submit" value="refresh map"> -->
-                  <!-- <button id="submit_params" type="submit">refresh</button> -->
                </form>
-               <div class="p-3">
+                <div class="p-3">
                   <button id="submit_params" type="submit">refresh</button>
                </div>
+               <div id="station_selected" class="p-3"></div>
             </div>
-            <div class="col-md-8">
-               <div class="vh-100" id="map"></div>
+
+            <div class="col-md-9">
+               <div class="vh-100" id="map"></div>               
             </div>
-        </div>
+
+            <div id="graph" style="display: none;" class="col-xl bg-light">
+               <div class="p-3 ">
+                  <h4 class="p-2">Data visualization</h4>
+                  <p id="info_station"></p>
+                  <canvas id="canvas_graph"></canvas>
+               </div>
+            </div>
+         </div>
      </div>
+
    <script src="{{url_for('static',filename='/js/map.js')}}"></script>
     
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
