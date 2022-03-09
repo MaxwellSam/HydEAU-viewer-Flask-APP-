@@ -44,13 +44,13 @@ def get_list_stations_from_hydro_data(list_stations, data_type):
     }
 
     if data_type == "H":
-        req["hydro_measure_tr"]="H"
+        req["hydro_measure"]="H"
         object_data = data_classes.Hydro_Obs_Tr(req)
     elif data_type == "Q":
-        req["hydro_measure_tr"]="Q"
+        req["hydro_measure"]="Q"
         object_data = data_classes.Hydro_Obs_Tr(req)
     elif data_type == "QmJ":
-        req["hydro_measure_elab"]="QmJ"
+        req["hydro_measure"]="QmJ"
         object_data = data_classes.Hydro_Obs_Elab(req)
 
     return get_list_stations(object_data.get_json())

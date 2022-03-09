@@ -108,10 +108,11 @@ translate_kw_hydro_elab = {
     "station":"code_entite",
     "date_start_obs":"date_debut_obs_elab",
     "date_end_obs":"date_fin_obs_elab",
-    "hydro_measure_elab":"grandeur_hydro_elab",
+    "hydro_measure":"grandeur_hydro_elab",
     "days_before":"date_debut_obs_elab",
     "months_before":"date_debut_obs_elab",
-    "years_before":"date_debut_obs_elab"
+    "years_before":"date_debut_obs_elab",
+    "result_obs":"resultat_obs_elab"
 }
 
 ## url hydro elab ##
@@ -146,11 +147,12 @@ translate_kw_hydro_tr = {
     "station":"code_entite",
     "date_start_obs":"date_debut_obs",
     "date_end_obs":"date_fin_obs",
-    "hydro_measure_tr":"grandeur_hydro",
+    "hydro_measure":"grandeur_hydro",
     "days_before":"date_debut_obs",
     "months_before":"date_debut_obs",
     "years_before":"date_debut_obs",
-    "time_step":"timestep"
+    "time_step":"timestep",
+    "result_obs":"resultat_obs"
 }
 
 ## url hydro tr ##

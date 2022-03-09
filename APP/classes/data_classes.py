@@ -26,6 +26,7 @@ class Hydro:
     Daughters: Hydro_Stations, Hydro_Obs
     Description: Generate hubEAU url to get stations around a coordinates point.
     """
+
     def fetch_json(self):
         """
         Description: Fetch data from hubEAU with the url and convert the response to json.
@@ -61,6 +62,8 @@ class Hydro:
                 next = file_next[next]
         self.data = {i:data[i] for i in range(len(data))}
 
+    # ------------------ get ----------------------
+
     def get_json(self):
         return self.data
     
@@ -83,6 +86,8 @@ class Hydro_Stations(Hydro):
         self.__generate_url_hubeau()
         self.fetch_json()
     
+    # ---------------- tools methods --------------------
+
     def __generate_url_hubeau(self):
         """
         Description: Generate the url for requestiong hubEAU from API request about hydrological stations information. 
@@ -100,15 +105,18 @@ class Hydro_Stations(Hydro):
             except ValueError as ve:
                 print("Error: class \'Hydro_Stations\' method \'generate_url_hubeau' => key {} not valid.".format(k))
     
+    # ------------------ get ----------------------
+
     def get_stations(self):
         return tb.get_list_stations(self.data)
 
     def get_stations_with_data(self, data_type):
         list_stations = tb.get_list_stations(self.data)
         return tb.get_list_stations_from_hydro_data(list_stations, data_type)
+    
+    # ------------- modif dataset -----------------
 
-    def fetch_json(self):
-        super().fetch_json()
+    def add_data_available(self):
         stations_Q = self.get_stations_with_data('Q')
         stations_H = self.get_stations_with_data('H')
         stations_QmJ = self.get_stations_with_data('QmJ')
@@ -121,7 +129,12 @@ class Hydro_Stations(Hydro):
             if station['code_station'] in stations_QmJ:
                 station['hydro_measure_av'].append('QmJ')
 
-    
+    def fetch_json(self):
+        super().fetch_json()
+        self.add_data_available()
+
+
+# ----------------------------------- Hydro Observations --------------------------------------- #
     
 class Hydro_Obs(Hydro):
     """
@@ -131,13 +144,10 @@ class Hydro_Obs(Hydro):
     Description: Generate hubEAU for hydrological data.
     """
     timedate_conv = var.timedate_convertion
-    
-    def __init__(self):
-        self.__generate_url_hubeau()
-        self.fetch_json()
-        # self.data = self.get_json()
 
-    def __generate_url_hubeau(self):
+    # ---------------- tools methods --------------------
+
+    def generate_url_hubeau(self):
         """
         Description: Generate the url for requestiong hubEAU from API request about hydrological data observations. 
                      It translate request's words and complete the url base.
@@ -158,6 +168,23 @@ class Hydro_Obs(Hydro):
             except ValueError as ve:
                 print("Error Value: class \'Hydro_Obs\' method \'__generate_url_hubeau\' type {} not valid ", ve)
 
+    # ------------- modif dataset -----------------
+
+    def rename_columns(self):
+        for row in self.data.values():
+            row["result_obs"] = row[self.translate_kw["result_obs"]]
+            row["hydro_measure"] = row[self.translate_kw["hydro_measure"]]
+            del row[self.translate_kw["result_obs"]]
+            del row[self.translate_kw["hydro_measure"]]
+
+    # ---------------- fetching -------------------
+
+    def fetch_json(self):
+        super().fetch_json()
+        self.rename_columns()
+
+    
+
 class Hydro_Obs_Elab(Hydro_Obs):
     """
     Class: Hydro_Obs_Elab
@@ -170,7 +197,9 @@ class Hydro_Obs_Elab(Hydro_Obs):
 
     def __init__(self, args):
         self.args=args
-        super().__init__()
+        super().generate_url_hubeau()
+        super().fetch_json()
+
 
 class Hydro_Obs_Tr(Hydro_Obs):
     """
@@ -184,7 +213,24 @@ class Hydro_Obs_Tr(Hydro_Obs):
 
     def __init__(self, args):
         self.args=args
-        super().__init__()
+        super().generate_url_hubeau()
+        super().fetch_json()
+        # super().__init__()
+    
+    # ------------- modif dataset -----------------
+
+    # def rename_columns(self):
+    #     for row in self.data.values():
+    #         row["result_obs"] = row[self.translate_kw["result_obs"]]
+    #         row["hydro_measure"] = row[self.translate_kw["hydro_measure"]]
+    #         del row[self.translate_kw["result_obs"]]
+    #         del row[self.translate_kw["hydro_measure"]]
+
+# test 
+
+# arg = {"station":"O965000101", "days_before":5}
+
+# test = Hydro_Obs_Elab(arg)
 
         
 

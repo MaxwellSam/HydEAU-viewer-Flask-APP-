@@ -21,20 +21,14 @@ const generate_arg_req = (args) => {
 class Graph_Station {
     // =============== Attributes ===================
     // Inputs user
-    params = document.getElementById("params");
+    params_hydro = document.getElementById("params_hydro");
     // graph config 
-    canvas = document.getElementById("canvas_graph");
+    graphDiv = document.getElementById("graphDiv");
 
-    constructor(){
-
-    }
+    constructor(){}
 
     initialize(data_station){
-        config = {
-            type:'line',
-            data:data_station
-        }
-        line_chart = new Chart(this.canvas) 
+         
     }
 
     select_translator(hydro_measure){

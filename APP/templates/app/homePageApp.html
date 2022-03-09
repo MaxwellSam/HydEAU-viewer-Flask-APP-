@@ -14,6 +14,8 @@
    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/000000/water.png"/>
    <!-- Chart.js -->
    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <!-- Plotly.js -->
+   <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
 </head>
 <body>
 
@@ -34,59 +36,76 @@
         </div>
      </nav>
      
-     <div class="container-fluid vh-100">
+     <div class="container-fluid">
 
-        <div id="sideBar_map" class="row justify-content-center h-100">        
-            
-         <div class="col-md-3 bg-light">      
-               <form id="params">
-                 <h3 class="text-center p-3">Parameters</h3>
-                 <div class="p-3">
-                    <h4 class="p-2">Stations localisation</h4>
-                    <p>
-                       <label for="lat">Latitude</label>
-                       <input id="lat" type="number" name="lat" step="0.000001" value="{{lat}}">
-                     </p>
-                     <p>
-                        <label for="long">Longitude</label>
-                        <input id="long" type="number" name="long" step="0.000001" value="{{long}}">
-                     </p>
-                     <p>
-                        <label for="dist">Distance (km)</label>
-                        <input id="dist" type="number" name="dist" min="0" value="{{dist}}">
-                     </p>
+         <div id="sideBar_map" class="row justify-content-center">        
+            <!-- PARAMETERS -->
+            <div class="col-sm-12 col-md-4 col-lg-3 bg-light">
+               <div class="row justify-content-center">
+                  <div class="col-xs-12 p-3">
+                     <h3 class="text-center p-3">Parameters</h3>
                   </div>
-                  <div class="p-3">
-                     <h4 class="p-2">Hydrological observations</h4>
-                     <p>
-                        <label for="lat">Measure type</label>
-                        <select id="hydro_measure" name="hydro_measure">
-                           {% for key, value in hydro_measures.items() %}
-                           <option value={{value}}>{{key}}</option>
-                           {% endfor %}
-                        </select>
-                     </p>
-                     <p>
-                        <label for="days_before">Historic data (days)</label>
-                        <input type="number" name="days_before" min="1" step="1" value="{{data_hist}}">
-                     </p>
+                  <!-- STATION LOC -->
+                  <div class="col-sm-6 col-md-12 p-3">
+                     <form id="params_loc">
+                        <h4 class="p-2">Stations localisation</h4>
+                        <p>
+                           <label for="lat">Latitude</label>
+                           <input id="lat" type="number" name="lat" step="0.000001" value="{{lat}}">
+                        </p>
+                        <p>
+                           <label for="long">Longitude</label>
+                           <input id="long" type="number" name="long" step="0.000001" value="{{long}}">
+                        </p>
+                        <p>
+                           <label for="dist">Distance (km)</label>
+                           <input id="dist" type="number" name="dist" min="0" value="{{dist}}">
+                        </p>
+                     </form>
                   </div>
-               </form>
-                <div class="p-3">
-                  <button id="submit_params" type="submit">refresh</button>
-               </div>
-               <div id="station_selected" class="p-3"></div>
+                     <!-- HYDRO OBSERVATIONS -->
+                  <div class="col-sm-6 col-md-12 p-3">
+                     <form id="params_hydro">
+                        <h4 class="p-2">Hydrological observations</h4>
+                        <p>
+                           <label for="lat">Measure type</label>
+                           <select id="hydro_measure" name="hydro_measure">
+                              {% for key, value in hydro_measures.items() %}
+                              <option value={{value}}>{{key}}</option>
+                              {% endfor %}
+                            </select>
+                         </p>
+                        <p>
+                           <label for="days_before">Historic data (days)</label>
+                           <input type="number" name="days_before" min="1" step="1" value="{{data_hist}}">
+                        </p>
+                     </form>
+                  </div>
+                  <!-- REFRESH BUTTON -->
+                  <div class="col-sm-12 p-3 text-center">
+                     <button id="submit_params" type="submit">refresh</button>
+                  </div>
+               </div>      
+               <!-- <div id="station_selected" class="p-3"></div> -->
+            </div>
+            <!-- MAP -->
+            <div class="col-sm-12 col-md-8 col-lg-9">
+               <div class="h-100" id="map" style="min-height: 500px;"></div>               
             </div>
 
-            <div class="col-md-9">
-               <div class="vh-100" id="map"></div>               
-            </div>
-
-            <div id="graph" style="display: none;" class="col-xl bg-light">
+         </div>
+     </div>
+     <!-- DATA VISUALIZATION -->
+     <div class="container-fluid">
+         <div class="row justify-content-center">
+            <!-- INFO STATION SELECTED -->
+            <div class="col-sm-12 col-md-4 col-lg-3 bg-light" id="station_selected"></div>
+            <!-- GRAPH -->
+            <div id="graph" style="display: none;" class="col-sm-12 col-md-8 col-lg-9 bg-light">
                <div class="p-3 ">
                   <h4 class="p-2">Data visualization</h4>
                   <p id="info_station"></p>
-                  <canvas id="canvas_graph"></canvas>
+                  <div id="graphDiv"></div>
                </div>
             </div>
          </div>
