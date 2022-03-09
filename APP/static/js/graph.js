@@ -8,40 +8,92 @@
 
 // ----------------------------- Usefull methods -----------------------------
 
-const generate_arg_req = (args) => {
-    var req = [];
-    for (let k in args){
-        req.push(k+"="+args[k]);
-    } 
-    return "?"+req.join("&");
-}
-
 // ------------------------------- Graph Class -------------------------------
 
-class Graph_Station {
+class GraphStation {
     // =============== Attributes ===================
     // Inputs user
     params_hydro = document.getElementById("params_hydro");
     // graph config 
     graphDiv = document.getElementById("graphDiv");
+    // to check if initialized
+    initialized = false;
+    // line graph elementy
+    lineGraph;
 
     constructor(){}
 
-    initialize(data_station){
-         
+    // ------------- variables ----------------------
+    hydro_measure_layout = {
+        "H":"water tide",
+        "Q":"flow",
+        "QmJ":"daily flow"
     }
+    // ------------- tools methods ------------------
 
-    select_translator(hydro_measure){
-        if (hydro_measure == "H"){
-            return 
+    generate_arg_req = (args) => {
+        let req = [];
+        for (let k in args){
+            req.push(k+"="+args[k]);
+        } 
+        return "?"+req.join("&");
+    }
+    
+    generate_req_obs(code_station){
+        let hydro_measure = this.params_hydro.hydro_measure.value;
+        let days_before = this.params_hydro.days_before;
+        let req = "/API/hydro/";
+        let args = {
+            "station":code_station,
+            "hydro_measure":hydro_measure,
+            "days_before":days_before 
+        };
+        if (hydro_measure == "H" || hydro_measure == "Q"){
+            return req += "tr/data"+this.generate_arg_req(args);
         }
-
+        else if (hydro_measure == "QmJ"){
+            return req += "elab/data"+this.generate_arg_req(args);
+        }
     }
 
-    format_dataset(data_station){
-        labels = data_station.Select();
-        data = [];
+    generate_layout(station){
+        let layout = {
+            title:`Evolution of ${this.hydro_measure_layout[this.params_hydro.hydro_measure.value]} for station ${station.libelle_station} (${station.code_station})`,
+            xaxis: {
+                title: `time`
+            },
+            yaxis: {
+                title: `${this.hydro_measure_layout[this.params_hydro.hydro_measure.value]}`
+            }
+        };
+        return layout;
+    }
 
+    // ------------ Initialization & refresh ------------------
+
+    initialize(station){
+        this.initialized = true;
+        let url = `${window.origin}`+this.generate_req_obs(station.code_station)
+        fetch(url) 
+        .then((resp) => resp.json())
+        .then((_data) => {
+            let dataset = {
+                x:[],
+                y:[],
+                type:'lines'
+            }
+            Object.values(_data).map((row) => {
+                dataset.x.push(row.date_obs);
+                dataset.y.push(row.result_obs);
+            });
+            this.lineGraph = Plotly.newPlot(this.graphDiv, [dataset], this.generate_layout(station))
+        });
+        
+    }
+
+    refresh(station){
+        Plotly.purge(this.graphDiv);
+        this.initialize(station);
     }
 
 }

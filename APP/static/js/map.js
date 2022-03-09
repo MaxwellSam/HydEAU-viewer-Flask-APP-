@@ -84,6 +84,8 @@ class MapStations {
     // Map elements 
     map = L.map('map');
     markersElements;
+    // Graph element
+    graphObject = new GraphStation();
 
     // =============== Constructor ==================
     constructor(){
@@ -109,19 +111,54 @@ class MapStations {
                             </div> 
                             `;
     }  
-    
-    diplayGraphStation(station){
-        let button_graph = document.getElementById('button_graph');
-        let graph = document.getElementById('graph');
-        let info_station = document.getElementById('info_station');
 
-        button_graph.addEventListener("click", (event) => {
-            if (graph.style.display != "block"){
-                graph.style.display = "block";
-            }
-            info_station.innerHTML = `<b>station:</b> ${station.libelle_station}<br/><b>code:</b> ${station.code_station}`
-            // place_graph_on_page(station);
-        });
+    // displayGraphStation_modal(station){
+    //     let modal_graph = document.getElementById('dataViz');
+    //     let link_active_modal = document.getElementById('btn_active_modal_graph');
+    //     let info_station = document.getElementById('info_station');
+
+    //     link_active_modal.addEventListener('click', (event) => {
+    //         event.stopPropagation()
+    //         var bsOffcanvas = new bootstrap.Offcanvas(modal_graph);
+    //         info_station.innerHTML = `<b>station:</b> ${station.libelle_station}<br/><b>code:</b> ${station.code_station}`
+    //         if (!this.graphObject.initialized){
+    //             this.graphObject.initialize(station);
+    //         } else if (this.graphObject.initialized) {
+    //             this.graphObject.refresh(station);
+    //         }
+    //         bsOffcanvas.show()
+    //     });
+
+    // }
+
+    diplayGraphStation(station){
+        let dataVizDiv = document.getElementById("dataVizDiv");
+        // let button_graph = document.getElementById('button_graph');
+        // let graph = document.getElementById('graph');
+        let info_station = document.getElementById('info_station');
+        // test off canvas 
+
+        if (dataVizDiv.style.display != "block"){
+            dataVizDiv.style.display = "block";
+        }
+        info_station.innerHTML = `<b>station:</b> ${station.libelle_station}<br/><b>code:</b> ${station.code_station}`
+        if (!this.graphObject.initialized){
+            this.graphObject.initialize(station);
+        } else if (this.graphObject.initialized) {
+            this.graphObject.refresh(station);
+        }
+
+        // button_graph.addEventListener("click", () => {
+        //     if (graph.style.display != "block"){
+        //         graph.style.display = "block";
+        //     }
+        //     info_station.innerHTML = `<b>station:</b> ${station.libelle_station}<br/><b>code:</b> ${station.code_station}`
+        //     if (!this.graphObject.initialized){
+        //         this.graphObject.initialize(station);
+        //     } else if (this.graphObject.initialized) {
+        //         this.graphObject.refresh(station);
+        //     }
+        // });
     }
 
     addStations(url){
@@ -139,9 +176,16 @@ class MapStations {
                     {icon:attrib_color(station, this.params_hydro.hydro_measure.value)}
                 )
                 .addTo(this.markersElements)
-                .bindPopup("<b>"+station.libelle_station+"</b><br/>"+station.code_station)
+                .bindPopup(
+                    `
+                    <b>${station.libelle_station}</b><br/>
+                    <b>${station.code_station}</b><br/>
+                    `)
                 .on('click', () => {
                     if (marker.getIcon() == greenIcon){
+                        // set blue color to market selected
+                        marker.setIcon(blueIcon)
+                        // remove blue color to last marker selected if exist
                         if (last_marker != null){
                             last_marker.setIcon(greenIcon);
                         }
@@ -149,10 +193,8 @@ class MapStations {
                         // infos station selected
                         this.displayInfoStation(station)
                         // graph station selected
-                        let button_graph = document.getElementById('button_graph');
                         this.diplayGraphStation(station)
-                        console.log("ok")
-                        marker.setIcon(blueIcon)
+                        
                     }
                     console.log(marker.getIcon())
                     console.log(station.code_station)

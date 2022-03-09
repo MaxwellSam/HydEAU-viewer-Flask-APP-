@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="UTF-8">
@@ -38,7 +39,7 @@
      
      <div class="container-fluid">
 
-         <div id="sideBar_map" class="row justify-content-center">        
+         <div id="sideBar_map" class="row justify-content-center vh-100">        
             <!-- PARAMETERS -->
             <div class="col-sm-12 col-md-4 col-lg-3 bg-light">
                <div class="row justify-content-center">
@@ -93,14 +94,46 @@
                <div class="h-100" id="map" style="min-height: 500px;"></div>               
             </div>
 
+            <!-- DATA VISUALIZATION -->
+            <div class="row justify-content-center" id="dataVizDiv" style="display: none;">
+               <div class="col-lg-3 bg-light" id="station_selected"></div>
+                  <!-- GRAPH -->
+                  <div id="graph" class="col-lg-8 bg-light">
+                     <div class="p-3 ">
+                        <h4 class="p-2">Data visualization</h4>
+                        <p id="info_station"></p>
+                        <div id="graphDiv"></div>
+                     </div>
+                  </div>
+            </div>
+            
+
          </div>
+
+         <!-- <div class="offcanvas offcanvas-bottom" tabindex="-1" id="dataViz" aria-labelledby="offcanvasBottomLabel">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="row justify-content-center"> -->
+               <!-- DATA VISUALIZATION -->
+               <!-- <div class="col-sm-12 col-md-4 col-lg-3 bg-light" id="station_selected"></div> -->
+               <!-- GRAPH -->
+               <!-- <div id="graph" class="col-sm-12 col-md-8 col-lg-9 bg-light">
+                  <div class="p-3 ">
+                     <h4 class="p-2">Data visualization</h4>
+                     <p id="info_station"></p>
+                     <div id="graphDiv"></div>
+                  </div>
+               </div>
+            </div>
+         </div> -->
+
      </div>
+
      <!-- DATA VISUALIZATION -->
-     <div class="container-fluid">
+     <!-- <div class="container-fluid">
          <div class="row justify-content-center">
-            <!-- INFO STATION SELECTED -->
+            INFO STATION SELECTED
             <div class="col-sm-12 col-md-4 col-lg-3 bg-light" id="station_selected"></div>
-            <!-- GRAPH -->
+            GRAPH
             <div id="graph" style="display: none;" class="col-sm-12 col-md-8 col-lg-9 bg-light">
                <div class="p-3 ">
                   <h4 class="p-2">Data visualization</h4>
@@ -109,11 +142,13 @@
                </div>
             </div>
          </div>
-     </div>
+     </div> -->
 
+   <script src="{{url_for('static',filename='/js/graph.js')}}"></script>
    <script src="{{url_for('static',filename='/js/map.js')}}"></script>
     
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script> -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
