@@ -96,7 +96,7 @@ class MapStations {
 
     // -------------- tools methods -----------------
 
-    displayInfoStation(station){
+    displayInfoStation(station, url){
         let info_Station_html = document.getElementById('station_selected');
         info_Station_html.innerHTML = 
                             `
@@ -106,8 +106,9 @@ class MapStations {
                                         <b>libelle:</b> ${station.libelle_station}<br/>
                                         <b>code:</b> ${station.code_station}<br/>
                                         <b>data available:</b> ${station.hydro_measure_av}
+                                        <div class="p-3" id="info_params">
+                                        </div>
                                     </p> 
-                                <button id="button_graph" type="button" class="btn btn-dark">See graph</button>
                             </div> 
                             `;
     }  
@@ -191,7 +192,7 @@ class MapStations {
                         }
                         last_marker = marker;
                         // infos station selected
-                        this.displayInfoStation(station)
+                        this.displayInfoStation(station, url)
                         // graph station selected
                         this.diplayGraphStation(station)
                         

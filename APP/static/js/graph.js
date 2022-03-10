@@ -41,7 +41,7 @@ class GraphStation {
     
     generate_req_obs(code_station){
         let hydro_measure = this.params_hydro.hydro_measure.value;
-        let days_before = this.params_hydro.days_before;
+        let days_before = this.params_hydro.days_before.value;
         let req = "/API/hydro/";
         let args = {
             "station":code_station,
@@ -74,6 +74,9 @@ class GraphStation {
     initialize(station){
         this.initialized = true;
         let url = `${window.origin}`+this.generate_req_obs(station.code_station)
+        // test params 
+        let infos_params = document.getElementById("info_params");
+        infos_params.innerHTML = `<b>url</b><a href="${url}">${url}</a>`
         fetch(url) 
         .then((resp) => resp.json())
         .then((_data) => {
