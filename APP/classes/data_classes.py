@@ -52,7 +52,7 @@ class Hydro:
         data = file["data"]
         next = file["next"]
         if next != None:
-            while next == None:
+            while next != None:
                 try:
                     response_next = requests.get(next, verify=False)
                 except requests.exceptions.RequestException as e:
