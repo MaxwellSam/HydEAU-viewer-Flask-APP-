@@ -49,6 +49,7 @@ class GraphStation {
             "days_before":days_before 
         };
         if (hydro_measure == "H" || hydro_measure == "Q"){
+            // args["time_step"] = 10;
             return req += "tr/data"+this.generate_arg_req(args);
         }
         else if (hydro_measure == "QmJ"){
@@ -89,6 +90,7 @@ class GraphStation {
                 dataset.x.push(row.date_obs);
                 dataset.y.push(row.result_obs);
             });
+            console.log(dataset.x)
             this.lineGraph = Plotly.newPlot(this.graphDiv, [dataset], this.generate_layout(station))
         });
         

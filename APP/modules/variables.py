@@ -112,7 +112,8 @@ translate_kw_hydro_elab = {
     "days_before":"date_debut_obs_elab",
     "months_before":"date_debut_obs_elab",
     "years_before":"date_debut_obs_elab",
-    "result_obs":"resultat_obs_elab"
+    "result_obs":"resultat_obs_elab",
+    "date_obs":"date_obs_elab"
 }
 
 ## url hydro elab ##
@@ -152,7 +153,8 @@ translate_kw_hydro_tr = {
     "months_before":"date_debut_obs",
     "years_before":"date_debut_obs",
     "time_step":"timestep",
-    "result_obs":"resultat_obs"
+    "result_obs":"resultat_obs",
+    "date_obs":"date_obs"
 }
 
 ## url hydro tr ##

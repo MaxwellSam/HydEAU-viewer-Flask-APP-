@@ -8,7 +8,7 @@ Date: 02/2022
 
 ## Imports ## 
 
-from git import Object
+# from git import Object
 import requests
 import json
 from datetime import date, timedelta
@@ -45,6 +45,7 @@ class Hydro:
         """
         try: 
             response = requests.get(self.url, verify=False)
+            # print("\n"+self.url+"\n")
         except requests.exceptions.RequestException as e:
             print("Error requests:", e)
         file = json.loads(response.text)
@@ -59,7 +60,7 @@ class Hydro:
                 file_next = json.loads(response_next.text) 
                 data_next = file_next["data"]
                 data += data_next
-                next = file_next[next]
+                next = file_next["next"]
         self.data = {i:data[i] for i in range(len(data))}
 
     # ------------------ get ----------------------
@@ -174,6 +175,9 @@ class Hydro_Obs(Hydro):
         for row in self.data.values():
             row["result_obs"] = row[self.translate_kw["result_obs"]]
             row["hydro_measure"] = row[self.translate_kw["hydro_measure"]]
+            if "date_obs" not in row.keys():
+                row["date_obs"] = row[self.translate_kw["date_obs"]]
+                del row[self.translate_kw["date_obs"]]
             del row[self.translate_kw["result_obs"]]
             del row[self.translate_kw["hydro_measure"]]
 
@@ -194,6 +198,7 @@ class Hydro_Obs_Elab(Hydro_Obs):
     """
     url = var.hydro_elab_url
     translate_kw = var.translate_kw_hydro_elab
+
 
     def __init__(self, args):
         self.args=args
