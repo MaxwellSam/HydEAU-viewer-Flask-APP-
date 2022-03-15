@@ -1,6 +1,6 @@
 """
-File: API.py
-Path: ./API/API.py
+File: APP.py
+Path: ./APP/API.py
 Description: HydrEAUviewer API for requesting hubEAU
 Author: Sam Maxwell
 Date: 02/2022
